@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photo Main</title>
-</head>
-<body>
-    PhotoMain
-    <a href="/user/login">로그인</a>
-</body>
-</html>
+<?php
+//메인 컨셉은 뭐로잡지... 
+//로그인 전 로그인 버튼 회원가입
+//로그인 후 로그아웃 버튼 회원정보 수정 페이지
+
