@@ -22,7 +22,10 @@ class Application{
         $controllerName=UrlUtil::replaceSlashToBackslash(_PATH_CONTROLLER.$identityName._BASE_FILENAME_CONTROLLER);
         
         new $controllerName($identityName,$action);
+        new application\controller\UserController('User', 'loginGet');
         
+        
+
         // var_dump($controllerName);
         // var_dump($arrPath);
         // var_dump($identityName);
