@@ -4,8 +4,13 @@ namespace application\controller;
 
 class UserController extends Controller 
 {
+    public function listGet()
+    {
+        return "list"._EXTENSION_PHP;
+    }
     public function loginGet()
     {
+        // var_dump($_GET);
         return "login"._EXTENSION_PHP;
     }
     public function loginPost()

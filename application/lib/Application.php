@@ -10,7 +10,7 @@ class Application{
         $arrPath = UrlUtil::getUrlArrPath();//접속 URL 배열로 받음
 
         $identityName = empty($arrPath[0])?"User":ucfirst($arrPath[0]);
-        $action= (empty($arrPath[1])?"login":$arrPath[1]).ucfirst(strtolower($_SERVER["REQUEST_METHOD"])); //todo
+        $action= (empty($arrPath[1])?"list":$arrPath[1]).ucfirst(strtolower($_SERVER["REQUEST_METHOD"])); //todo
         // var_dump($_SERVER["REQUEST_METHOD"]);
         $controllerPath = _PATH_CONTROLLER.$identityName._BASE_FILENAME_CONTROLLER._EXTENSION_PHP;
 
@@ -22,7 +22,7 @@ class Application{
         $controllerName=UrlUtil::replaceSlashToBackslash(_PATH_CONTROLLER.$identityName._BASE_FILENAME_CONTROLLER);
         
         new $controllerName($identityName,$action);
-        new application\controller\UserController('User', 'loginGet');
+        // new application\controller\UserController('User', 'listGet');
         
         
 

@@ -69,7 +69,7 @@ class Controller
         $urlPath = UrlUtil::getUrl();
         foreach (self::$arrNeedAuth as $authPath) {
             if (!isset($_SESSION[_STR_LOGIN_ID])&&strpos($urlPath,$authPath)===0) {
-                header(_BASE_REDIRECT."/user/login");
+                header(_BASE_REDIRECT."/user/list");
                 exit();
             }
         }
