@@ -329,10 +329,20 @@
 <div class="page_content  steam">
 	
 	<div class="joinsteam_content_container">
-		<div id="error_display" style="display: none;"></div>
+    <div id="error_display" style="<?
+    if(isset($this->arrError)){echo("background-image: none; background-color: rgba(0, 0, 0, 0.5)");}
+    else {
+        echo("display: none;");
+    }
+    ?>"><?
+    if ((isset($this->arrError))) {
+        foreach ($this->arrError as $key => $value) {
+            echo $value."</br>";
+        }
+    }?></div>
 
 				<div class="create_account_form_container" id="cart_area">
-			<form id="create_account" name="create_account" onsubmit="CreateAccount(); return false;" >
+			<form id="create_account" name="create_account"  action="/user/regis" method="post">
 				<input type="hidden" name="lt" id="lt" value="0"/>
 				<div id="account_form_box">
 					<div class="join_form">
@@ -342,25 +352,29 @@
 						<div class="form_row row_flex">
 							<div class="form_area">
 								<label for="id">아이디</label>
-								<input type="text" maxlength="255" name="id" id="id" />
+								<input type="text" maxlength="255" name="id" id="id" value="<?if (!empty($_POST["id"])) {
+            echo $_POST["id"];
+        } ?>"/>
 							</div>
 						</div>
 						<div class="form_row row_flex">
 							<div class="form_area">
 								<label for="pw">비밀번호</label>
-								<input type="text" maxlength="255" name="pw" id="pw" />
+								<input type="password" maxlength="255" name="pw" id="pw" />
 							</div>
 						</div>
 						<div class="form_row row_flex">
 							<div class="form_area">
 								<label for="pwChk">비밀번호 확인</label>
-								<input type="text" maxlength="255" name="pwChk" id="pwChk" />
+								<input type="password" maxlength="255" name="pwChk" id="pwChk" />
 							</div>
 						</div>
 						<div class="form_row row_flex">
 							<div class="form_area">
 								<label for="name">닉네임</label>
-								<input type="text" maxlength="255" name="name" id="name" />
+								<input type="text" maxlength="255" name="name" id="name" value="<?if (!empty($_POST["name"])) {
+            echo $_POST["name"];
+        } ?>"/>
 							</div>
 						</div>
 						

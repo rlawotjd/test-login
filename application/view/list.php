@@ -1,4 +1,4 @@
-
+<?//var_dump($_SESSION);?>
 <!DOCTYPE html>
 <html class=" responsive" lang="ko">
 <head>
@@ -86,7 +86,15 @@
         <div class="responsive_page_menu"  id="responsive_page_menu">
             <div class="mainmenu_contents">
                 <div class="mainmenu_contents_items">
-                    <a class="menuitem" href="/user/login">로그인</a>
+					<?
+					if(empty($_SESSION)){
+						?><a class="menuitem" href="/user/login">로그인</a><?
+					}
+					elseif(!empty($_SESSION)){
+						?><a class="menuitem" href="/user/privacy">회원정보수정</a>
+						<a class="menuitem" href="/user/logout">로그아웃</a><?
+					}
+					?>
 					<a class="menuitem supernav" href="https://store.steampowered.com/?snr=1_4_4__global-responsive-menu" data-tooltip-type="selector" data-tooltip-content=".submenu_store">상점</a>
                     <div class="submenu_store" style="display: none;" data-submenuid="store">
 	                    <a class="submenuitem" href="https://store.steampowered.com/?snr=1_4_4__global-responsive-menu">홈</a>
@@ -217,8 +225,16 @@
 							Steam 설치						</a>
 					</div>
 				
-				
-														<a class="global_action_link" href="/user/login">로그인</a>
+					<?
+					if(empty($_SESSION)){
+						?><a class="global_action_link" href="/user/login">로그인</a><?
+					}
+					elseif(!empty($_SESSION)){
+						?><a class="global_action_link" href="/user/logout">로그아웃</a>
+						&nbsp;|&nbsp;
+						<a class="global_action_link" href="/user/privacy">정보수정</a><?
+					}
+					?>
 											&nbsp;|&nbsp;
 						<span class="pulldown global_action_link" id="language_pulldown" onclick="ShowMenu( this, 'language_dropdown', 'right' );">언어</span>
 						<div class="popup_block_new" id="language_dropdown" style="display: none;">

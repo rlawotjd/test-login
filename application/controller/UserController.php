@@ -11,7 +11,12 @@ class UserController extends Controller
     public function loginGet()
     {
         // var_dump($_GET);
-        return "login"._EXTENSION_PHP;
+        if(empty($_SESSION)){
+            return "login"._EXTENSION_PHP;
+        }
+        else{
+            return "list"._EXTENSION_PHP;
+        }
     }
     public function loginPost()
     {
@@ -22,8 +27,10 @@ class UserController extends Controller
             $errMsg="입력하신 회원 정보가 없습니다.";
             $this->addDynamicProperty("errMsg",$errMsg);
             //로그인 페이지 리턴
+            $arrPost=$_POST;
+            $this->addDynamicProperty("arrInput",$arrPost);
+            // var_dump($arrPost);
             return "login"._EXTENSION_PHP;
-
         }
         $_SESSION[_STR_LOGIN_ID] = $_POST["id"];
 
@@ -49,6 +56,7 @@ class UserController extends Controller
     public function regisPost()
     {
         $arrPost=$_POST;
+        // var_dump($arrPost);
         $arrChkErr = [];
         $pattenSo="/[a-z]/";
         $pattenDE="/[A-Z]/";
@@ -67,14 +75,14 @@ class UserController extends Controller
         if (mb_strlen($arrPost["pw"])>20||mb_strlen($arrPost["pw"])<8) {
             $arrChkErr["pw"]="PW는 8글자 이상 20글자 이하로 입력해주세요";
         }
-        if (((preg_match($pattenTT,$arrPost["pw"])+preg_match($pattenSU,$arrPost["pw"])+preg_match( $pattenDE,$arrPost["pw"])+preg_match( $pattenSo,$arrPost["pw"])===4)&&preg_match($pattenPW,$arrPost["pw"])!==0)) {
+        if (preg_match($pattenTT,$arrPost["pw"])===0||preg_match($pattenSU,$arrPost["pw"])===0||preg_match( $pattenDE,$arrPost["pw"])===0||preg_match( $pattenSo,$arrPost["pw"])===0||preg_match($pattenPW,$arrPost["pw"])!==0) {
             $arrChkErr["pw"]="PW영어대소문자숫자특수문자하나씩넣어주세요";
         }
         if ($arrPost["pw"]!==$arrPost["pwChk"]) {
             $arrChkErr["pwChk"]="비밀번호와 일치하지 않습니다.";
         }
         if (mb_strlen($arrPost["name"])>30||mb_strlen($arrPost["name"])===0) {
-            $arrChkErr["name"]="담당자한테 문의해주세요";
+            $arrChkErr["name"]="닉네임을 입력해주세요";
         }
         //유효성 체크 에러일 경우
         if (!empty($arrChkErr)) {
@@ -116,8 +124,34 @@ class UserController extends Controller
         $sess=$_SESSION[_STR_LOGIN_ID];
         $result = $this->model->getUser(["id"=>$sess],false);
         $this->model->close();
+        $day_t=$result[0]["u_update"];
+        $now_t=date("Y-m-d");
+        // $day = new DateTime($day_t); //신버전
+        $day = date_create($day_t); //구버전 버그
+        $now = date_create($now_t);
+        // var_dump($day);
+        // var_dump($now);
+        $interval = date_diff($day, $now)->days;
+        // var_dump($interval);
         $this->addDynamicProperty("arrInfo",$result[0]);
+        $this->addDynamicProperty("DDAY",$interval);
+        
         return "privacy"._EXTENSION_PHP;
+    }
+    public function updateGet()
+    {
+        // var_dump($_POST);
+        // var_dump($_GET);
+        // var_dump(!empty($_POST));
+        // var_dump(isset($_GET));
+        $sess=$_SESSION[_STR_LOGIN_ID];
+        $result = $this->model->getUser(["id"=>$sess],false);
+        $this->model->close();
+        // var_dump($interval);
+        $this->addDynamicProperty("arrInfo",$result[0]);
+ 
+        
+        return "update"._EXTENSION_PHP;
     }
 
     public function updatePost()
@@ -146,21 +180,21 @@ class UserController extends Controller
         if ($arrPost["pw"]===$this->arrInfo['u_pw']) {
             $arrChkErr["pw"]="기존에 사용하신 비밀번호 입니다";
         }
-        if (((preg_match($pattenTT,$arrPost["pw"])+preg_match($pattenSU,$arrPost["pw"])+preg_match( $pattenDE,$arrPost["pw"])+preg_match( $pattenSo,$arrPost["pw"])===4)&&preg_match($pattenPW,$arrPost["pw"])!==0)) {
+        if (preg_match($pattenTT,$arrPost["pw"])===0||preg_match($pattenSU,$arrPost["pw"])===0||preg_match( $pattenDE,$arrPost["pw"])===0||preg_match( $pattenSo,$arrPost["pw"])===0||preg_match($pattenPW,$arrPost["pw"])!==0) {
             $arrChkErr["pw"]="PW영어대소문자숫자특수문자하나씩넣어주세요";
         }
         if ($arrPost["pw"]!==$arrPost["pwChk"]) {
             $arrChkErr["pwChk"]="비밀번호와 일치하지 않습니다.";
         }
         if (mb_strlen($arrPost["name"])>30||mb_strlen($arrPost["name"])===0) {
-            $arrChkErr["name"]="담당자한테 문의해주세요";
+            $arrChkErr["name"]="닉네임을 입력해주세요";
         }
         //유효성 체크 에러일 경우
         if (!empty($arrChkErr)) {
             //에러메서지 셋팅
             // $this->addDynamicProperty("arrInfo",$arrInfo);
             $this->addDynamicProperty('UarrError',$arrChkErr);
-            return "privacy"._EXTENSION_PHP; //콘트롤러에있는 메소드 실행 리카이어원스 자연스러운 연결?
+            return "update"._EXTENSION_PHP; //콘트롤러에있는 메소드 실행 리카이어원스 자연스러운 연결?
             // return "_BASE_REDIRECT."/user/privacy"; //새로우 url페이지로 이동 기존 정보 점프
         }
         //transaction start
@@ -175,7 +209,7 @@ class UserController extends Controller
         //transaction end
         $this->model->close();
         var_dump($arrInfo);
-        //로그인 페이지로 이동
+        //프라버시 이동
         return _BASE_REDIRECT."/user/privacy";
     }
 }
